@@ -26,19 +26,18 @@ app.MapPut("/", ([FromQuery]Guid id, UpdateMotorbikeDTO dto) =>
     {
         return Results.NotFound();
     }
-    var updatedMotorbike = new Motorbike
-    {
-        Bikenum = dto.bikenum,
-        Mark = dto.mark,
-        Lastname = dto.lastname,
-        Numphone = dto.numphone
-    };
+
+    buffer.Bikenum = dto.bikenum;
+    buffer.Mark = dto.mark;
+    buffer.Lastname = dto.lastname;
+    buffer.Numphone = dto.numphone;
+
     var validationResults = new List<ValidationResult>();
-    if (!Validator.TryValidateObject(updatedMotorbike, new ValidationContext(updatedMotorbike), validationResults, true))
+    if (!Validator.TryValidateObject(buffer, new ValidationContext(buffer), validationResults, true))
     { return Results.BadRequest(validationResults); }
     repo.Remove(buffer);
-    repo.Add(updatedMotorbike);
-    return Results.Json(updatedMotorbike);
+    repo.Add(buffer);
+    return Results.Json(buffer);
 });
 app.MapDelete("/", ([FromQuery] Guid id) => 
 {
